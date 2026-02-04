@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{object.text|truncatechars:10}}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8 panel panel-default">
+            <p><img src="{{object.photo.url}}" style="width:100%;"></p>
+            <button type="button" class="btn btn-xs btn-info">
+                {{object.author.username}}
+            </button>
+            <p>{{object.text|linebreaksbr}}</p>
+            
+            <a href="{% url 'photo:photo_delete' pk=object.id %}" class="btn btn-outline-danger btn-sm float-right">Delete</a>
+            <a href="{% url 'photo:photo_update' pk=object.id %}" class="btn btn-outline-success btn-sm float-right">Update</a>
+            
+            <div style="clear: both;"></div> <hr>
+
+            <h5>Comments</h5>
+            <div class="comment-list">
+                {% for comment in object.comments.all %}
+                <div class="mb-3 p-2 border-bottom">
+                    <strong>{{ comment.author.username }}</strong> : {{ comment.text }}
+                    <div class="mt-1">
+                        <a href="{% url 'photo:comment_like' comment.id %}" class="btn btn-sm btn-outline-primary">
+                        👍 {{ comment.like_users.count }}
+                        </a>
+                        <a href="{% url 'photo:comment_dislike' comment.id %}" class="btn btn-sm btn-outline-danger">
+                        👎 {{ comment.dislike_users.count }}
+                        </a>
+                        <small class="text-muted ml-2">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <hr>
+
+            {% if user.is_authenticated %}
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.text }} </div>
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </form>
+            {% else %}
+                <p><a href="{% url 'login' %}">Login</a> to leave a comment.</p>
+            {% endif %}
+            </div>
+        <div class="col-md-2"></div>
+    </div>
+{% endblock %}

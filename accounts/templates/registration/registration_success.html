@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}- Registration Success {% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 panel panel-default">
+        <div class="alert alert-info">Registration successful! Welcome, {{ user.username }}.</div>
+        <a class="btn btn-info" href="/">Move to main</a>
+    </div>
+    
+    <div class="col-md-2"></div>
+</div>
+
+{% endblock %}
